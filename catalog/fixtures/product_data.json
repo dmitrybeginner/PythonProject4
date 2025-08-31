@@ -1,0 +1,41 @@
+[
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "name": "Смартфон Samsung",
+    "description": "Мощный смартфон с хорошей камерой",
+    "image": null,
+    "category": 1,
+    "price": "27999.99",
+    "created_at": "2023-12-01T10:00:00Z",
+    "updated_at": "2023-12-01T10:00:00Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "Ноутбук HP",
+    "description": "Игровой ноутбук для работы и развлечений",
+    "image": null,
+    "category": 1,
+    "price": "75999.50",
+    "created_at": "2023-12-01T10:00:00Z",
+    "updated_at": "2023-12-01T10:00:00Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 3,
+  "fields": {
+    "name": "Книга Python",
+    "description": "Лучшая книга для изучения Python",
+    "image": null,
+    "category": 2,
+    "price": "1500.00",
+    "created_at": "2023-12-01T10:00:00Z",
+    "updated_at": "2023-12-01T10:00:00Z"
+  }
+}
+]
