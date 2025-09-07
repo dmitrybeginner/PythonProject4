@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends 'base.html' %}
+
+{% block title %}Удаление товара - SkyStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h1 class="display-4 mb-4">Удаление товара</h1>
+            
+            <div class="alert alert-danger">
+                <p>Вы уверены, что хотите удалить товар "{{ object.name }}"?</p>
+                <p>Это действие нельзя отменить.</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">Да, удалить</button>
+                    <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-outline-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}</title>
+</head>
+<body>
+
+</body>
+</html>

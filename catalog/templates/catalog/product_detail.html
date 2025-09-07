@@ -38,9 +38,12 @@
         </div>
 
         <div class="d-grid gap-2 d-md-flex">
-            <button class="btn btn-primary btn-lg">Добавить в корзину</button>
-            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">Назад</a>
+            <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-primary btn-lg">Редактировать</a>
+            <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg">Удалить</a>
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary btn-lg">Назад к каталогу</a>
         </div>
     </div>
 </div>
 {% endblock %}
+
+
