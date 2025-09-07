@@ -20,14 +20,15 @@
             <div class="col-6 col-md-2 mb-3">
                 <h6 class="fw-bold mb-3">Дополнительно</h6>
                 <ul class="list-unstyled">
-                    <li><a class="text-muted text-decoration-none" href="#">Мы пишем</a></li>
+                    <li class="mb-1"><a class="text-muted text-decoration-none" href="{% url 'blog:post_list' %}">Блог</a></li>
+                    <li class="mb-1"><a class="text-muted text-decoration-none" href="#">Мы пишем</a></li>
                 </ul>
             </div>
 
             <div class="col-6 col-md-2 mb-3">
                 <h6 class="fw-bold mb-3">О нас</h6>
                 <ul class="list-unstyled">
-                    <li><a class="text-muted text-decoration-none" href="/contacts/">Контакты</a></li>
+                    <li class="mb-1"><a class="text-muted text-decoration-none" href="/contacts/">Контакты</a></li>
                 </ul>
             </div>
         </div>
