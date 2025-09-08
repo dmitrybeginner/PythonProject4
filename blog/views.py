@@ -1,11 +1,12 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import BlogPost
 from .forms import BlogPostForm
 
 
-class BlogPostListView(ListView):
+class BlogPostListView(LoginRequiredMixin, ListView):
     """Список блоговых записей - только опубликованные"""
     model = BlogPost
     template_name = 'blog/post_list.html'
@@ -16,7 +17,7 @@ class BlogPostListView(ListView):
         return BlogPost.objects.filter(is_published=True).order_by('-created_at')
 
 
-class BlogPostDetailView(DetailView):
+class BlogPostDetailView(LoginRequiredMixin, DetailView):
     """Детальный просмотр блоговой записи с увеличением счетчика просмотров"""
     model = BlogPost
     template_name = 'blog/post_detail.html'
@@ -30,7 +31,7 @@ class BlogPostDetailView(DetailView):
         return obj
 
 
-class BlogPostCreateView(CreateView):
+class BlogPostCreateView(LoginRequiredMixin, CreateView):
     """Создание новой блоговой записи"""
     model = BlogPost
     form_class = BlogPostForm
@@ -38,7 +39,7 @@ class BlogPostCreateView(CreateView):
     success_url = reverse_lazy('blog:post_list')
 
 
-class BlogPostUpdateView(UpdateView):
+class BlogPostUpdateView(LoginRequiredMixin, UpdateView):
     """Редактирование блоговой записи с перенаправлением на просмотр статьи"""
     model = BlogPost
     form_class = BlogPostForm
@@ -49,7 +50,7 @@ class BlogPostUpdateView(UpdateView):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
 
-class BlogPostDeleteView(DeleteView):
+class BlogPostDeleteView(LoginRequiredMixin, DeleteView):
     """Удаление блоговой записи"""
     model = BlogPost
     template_name = 'blog/post_confirm_delete.html'
