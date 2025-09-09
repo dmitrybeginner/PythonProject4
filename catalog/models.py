@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
@@ -69,11 +70,17 @@ class Product(models.Model):
         auto_now=True,
         verbose_name='дата последнего изменения'
     )
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='владелец')
+    is_published = models.BooleanField(default=False, verbose_name='опубликовано')
 
     class Meta:
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
         ordering = ['name', '-created_at']
+        permissions = [
+            ("can_unpublish_product", "Может отменять публикацию продукта"),
+            ("can_publish_product", "Может публиковать продукт"),
+        ]
 
     def __str__(self):
         return f"{self.name} - {self.price} руб."
