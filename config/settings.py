@@ -60,6 +60,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'False').lower() in ('true', '1', 't')
+
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://127.0.0.1:6379/1',
+        }
+    }
+
 if os.getenv('DB_ENGINE') == 'postgres':
     DATABASES = {
         'default': {

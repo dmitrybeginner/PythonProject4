@@ -4,8 +4,43 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
-from .models import Product
+from .models import Product, Category
 from .forms import ProductForm
+from .services import get_products_by_category
+from django.core.cache import cache
+from config.settings import CACHE_ENABLED
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+
+class CategoryProductListView(ListView):
+    """Список товаров по категориям"""
+    model = Product
+    template_name = "catalog/category_product_list.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        cache_key = f'category_{category_id}_products'
+        if self.request.user.is_staff:
+            cache_key += '_staff'
+
+        queryset = cache.get(cache_key) if CACHE_ENABLED else None
+
+        if queryset is None:
+            queryset = get_products_by_category(category_id)
+            if not self.request.user.is_staff:
+                queryset = queryset.filter(is_published=True)
+            
+            if CACHE_ENABLED:
+                cache.set(cache_key, queryset)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(pk=self.kwargs['category_id'])
+        return context
 
 
 class ProductListView(ListView):
@@ -15,12 +50,25 @@ class ProductListView(ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        # Показываем только опубликованные товары для всех, кроме персонала
+        cache_key = 'product_list'
         if self.request.user.is_staff:
-            return Product.objects.all().order_by('-created_at')
-        return Product.objects.filter(is_published=True).order_by('-created_at')
+            cache_key += '_staff'
+
+        queryset = cache.get(cache_key) if CACHE_ENABLED else None
+
+        if queryset is None:
+            if self.request.user.is_staff:
+                queryset = super().get_queryset().order_by('-created_at')
+            else:
+                queryset = super().get_queryset().filter(is_published=True).order_by('-created_at')
+            
+            if CACHE_ENABLED:
+                cache.set(cache_key, queryset)
+
+        return queryset
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     """Детальный просмотр товара"""
     model = Product
