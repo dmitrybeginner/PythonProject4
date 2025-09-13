@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Каталог товаров - SkyStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4">Каталог товаров</h1>
+        <a href="{% url 'catalog:product_create' %}" class="btn btn-primary">+ Добавить товар</a>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <span class="text-muted">📷 Нет изображения</span>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.price }} руб.</p>
+                    {% if product.description %}
+                    <p class="card-text text-muted small">
+                        {{ product.description|truncatechars:100 }}
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary btn-sm">Подробнее</a>
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-outline-secondary btn-sm">✏️</a>
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger btn-sm">🗑️</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Товары отсутствуют
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
